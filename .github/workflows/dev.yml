@@ -1,4 +1,4 @@
-name: SGminerOSX
+name: Compile sgminer for macOS
 
 on:
   push:
@@ -6,24 +6,24 @@ on:
       - main
 
 env:
-  PKG_CONFIG_PATH: /usr/local/opt/libffi/lib/pkgconfig
+  CFLAGS: "-O2 -Wall -arch x86_64"
 
 jobs:
   build:
-    runs-on: macOS-latest
-    
+    runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
-    - name: Set up environment
+
+    - name: Install dependencies
       run: |
-        brew install curl libtool pkg-config
-        brew install libcurl4-openssl-dev
-        brew install libncurses5-dev
-      
+        sudo apt-get update
+        sudo apt-get install -y binutils-apple-darwin
+        sudo apt-get install -y g++-apple-darwin
+
     - name: Build sgminer
       run: |
         autoreconf -i
-        CFLAGS="-O2 -Wall -march=native" ./configure
+        CFLAGS=$CFLAGS ./configure
         make
