@@ -19,11 +19,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Add PPA for dependencies
-      run: |
-        sudo add-apt-repository ppa:philip5/extra
-        sudo apt-get update
-
     - name: Install dependencies
       run: |
         sudo apt-get install -y binutils-apple-darwin
