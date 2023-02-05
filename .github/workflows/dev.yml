@@ -1,0 +1,29 @@
+name: SGminerOSX
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PKG_CONFIG_PATH: /usr/local/opt/libffi/lib/pkgconfig
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up environment
+      run: |
+        brew install curl libtool pkg-config
+        brew install libcurl4-openssl-dev
+        brew install libncurses5-dev
+      
+    - name: Build sgminer
+      run: |
+        autoreconf -i
+        CFLAGS="-O2 -Wall -march=native" ./configure
+        make
