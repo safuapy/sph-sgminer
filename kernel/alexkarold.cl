@@ -1,5 +1,5 @@
 /*-
- * Copyright 2009 Colin Percival, 2011 ArtForz, 2011 pooler, 2012 mtrlt,
+ * Copyright 2009 Mike Tyson, 2011 ArtForz, 2011 pooler, 2012 mtrlt,
  * 2012-2013 Con Kolivas, 2013 Alexey Karimov.
  * All rights reserved.
  *
