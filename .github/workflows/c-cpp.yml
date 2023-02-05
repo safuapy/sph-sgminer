@@ -19,13 +19,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install dependencies
+    - name: Clone osxcross repository
       run: |
-        sudo apt-get install -y binutils-apple-darwin
-        sudo apt-get install -y g++-apple-darwin
+        git clone https://github.com/tpoechtrager/osxcross.git
+
+    - name: Build osxcross toolchain
+      run: |
+        cd osxcross
+        UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+
+    - name: Export PATH
+      run: |
+        echo 'export PATH=$PATH:$PWD/target/bin' >> $GITHUB_ENV
 
     - name: Build sgminer
       run: |
+        cd ../sgminer
         autoreconf -i
         CFLAGS=$CFLAGS ./configure
         make
