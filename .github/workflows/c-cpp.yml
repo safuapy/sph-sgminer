@@ -1,42 +1,36 @@
-name: Compile sgminer
+name: Compile sgminer for macOS
 
 on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 env:
-  CFLAGS: "-O2 -Wall"
+  CFLAGS: "-O2 -Wall -arch x86_64"
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macOS-latest]
-        arch: [x86_64, i386]
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Add PPA for dependencies
+      run: |
+        sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa
+        sudo apt-get update
+
     - name: Install dependencies
       run: |
-        if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-          sudo apt-get update
-          sudo apt-get install -y binutils-apple-darwin
-          sudo apt-get install -y g++-apple-darwin
-        fi
+        sudo apt-get install -y binutils-apple-darwin
+        sudo apt-get install -y g++-apple-darwin
 
     - name: Build sgminer
       run: |
         autoreconf -i
-        CFLAGS="$CFLAGS -arch ${{ matrix.arch }}" ./configure
+        CFLAGS=$CFLAGS ./configure
         make
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: sgminer-${{ matrix.os }}-${{ matrix.arch }}
-        path: sgminer
