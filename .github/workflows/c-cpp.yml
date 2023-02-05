@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - name: Checkout code
@@ -21,7 +21,7 @@ jobs:
 
     - name: Add PPA for dependencies
       run: |
-        sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa
+        sudo add-apt-repository ppa:philip5/extra
         sudo apt-get update
 
     - name: Install dependencies
